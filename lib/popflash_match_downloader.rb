@@ -8,6 +8,6 @@ module PopflashMatchDownloader
   end
 end
 
-require_relative 'popflash_match_downloader/match_file_name_extractor'
-require_relative 'popflash_match_downloader/recent_matches_extractor'
-require_relative 'popflash_match_downloader/downloader'
+require 'popflash_match_downloader/match_file_name_extractor'
+require 'popflash_match_downloader/recent_matches_extractor'
+require 'popflash_match_downloader/downloader'

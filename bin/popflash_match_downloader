@@ -1,7 +1,5 @@
 #!/usr/bin/env ruby
-
-
-require_relative 'lib/popflash_match_downloader'
+require 'popflash_match_downloader'
 
 e = PopflashMatchDownloader::RecentMatchesExtractor.new('5579')
 files = e.find_match_ids.map do |id|
