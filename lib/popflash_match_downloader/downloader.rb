@@ -18,14 +18,19 @@ module PopflashMatchDownloader
       file_location = '/' + name
 
       Net::HTTP.start('s3.popflash.site') do |http|
-        File.open file_path(name), 'w' do |f|
-          http.request_get file_location do |response|
-            while response.is_a? Net::HTTPRedirection
-              location = response['location']
-              warn "redirecting to #{location}"
-              response = http.request_get location
+        http.request_get file_location do |response|
+          while response.is_a? Net::HTTPRedirection
+            location = response['location']
+            puts "redirecting to #{location}"
+            response = http.request_get location
+          end
+
+          if response.is_a? Net::HTTPSuccess
+            File.open file_path(name), 'wb' do |f|
+              response.read_body { |seg| f.write seg }
             end
-            response.read_body { |seg| f.write seg }
+          else
+            puts "couldn't donwload demo. error: #{response.message}"
           end
         end
       end
