@@ -1,12 +1,21 @@
 #!/usr/bin/env ruby
+require 'thor'
 require 'popflash_match_downloader'
 
-e = PopflashMatchDownloader::RecentMatchesExtractor.new('5579')
-files = e.find_match_ids.map do |id|
-  PopflashMatchDownloader::MatchFileNameExtractor.new(id).extract_file_name
+class PopflashMatchDownloaderCli < Thor
+  desc 'download USER_ID', 'Downloads the most recent five matches for the given user id'
+  method_option :download_dir, aliases: '-d', desc: 'The download target directory', default: './'
+  def download(user_id)
+    e = PopflashMatchDownloader::RecentMatchesExtractor.new(user_id)
+    files = e.find_match_ids.map do |id|
+      PopflashMatchDownloader::MatchFileNameExtractor.new(id).extract_file_name
+    end
+
+    loader = PopflashMatchDownloader::Downloader.new options[:download_dir]
+    files.each do |f|
+      loader.download_file_if_needed f
+    end
+  end
 end
 
-loader = PopflashMatchDownloader::Downloader.new './'
-files.each do |f|
-  loader.download_file_if_needed f
-end
+PopflashMatchDownloaderCli.start

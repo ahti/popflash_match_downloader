@@ -10,4 +10,6 @@ Gem::Specification.new do |s|
   s.homepage    = 'https://github.com/Ahti/popflash_match_downloader'
   s.files       = `git ls-files README.md LICENSE lib bin`.split "\n"
   s.executables = s.files.grep(%r{^bin/}).map { |f| File.basename(f) }
+
+  s.add_runtime_dependency 'thor', '~> 0.19', '>= 0.19.1'
 end
